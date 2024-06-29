@@ -43,7 +43,7 @@ export const sidebarLinks = [
     },
   ];
   
-  export const podcastData = [
+  export const poetryData = [
     {
       id: 1,
       title: "The Joe Rogan Experience",
