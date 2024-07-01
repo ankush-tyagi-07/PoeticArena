@@ -1,8 +1,144 @@
-import React from 'react'
+import { GeneratePoetryProps } from '@/types'
+import React, { useState } from 'react'
+import { Label } from './ui/label'
+import { Textarea } from './ui/textarea'
+import { Button } from './ui/button'
+import { Loader } from 'lucide-react'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { v4 as uuidv4 } from 'uuid';
+import { generateUploadUrl } from '@/convex/files'
+import { useUploadFiles } from '@xixixao/uploadstuff/react'
+import { useToast } from "@/components/ui/use-toast"
 
-const GeneratePoetry = () => {
+
+const useGeneratePoetry = ({
+  setAudio, voicePrompt, setAudioStorageId
+}: GeneratePoetryProps) => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  // const getPoetryAudio = useAction(api.openai.generateAudioAction);
+
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const { startUpload } = useUploadFiles(generateUploadUrl)
+  const getAudioUrl = useMutation(api.poetries.getUrl);
+
+  const { toast } = useToast();
+
+  const generatePoetry = async (inputFile: File) => {
+    setIsGenerating(true);
+    setAudio('');
+
+
+    if (!voicePrompt) {
+      toast({
+        title: "Please provide a voiceType to generate a poetry",
+      })
+      return setIsGenerating(false);
+    }
+
+    try {
+      // const response = await getPoetryAudio({
+      //   voice: voiceType,
+      //   input: voicePrompt
+      // })
+
+      // const blob = new Blob([response], { type: 'audio/mpeg' });
+      // const fileName = `poetry-${uuidv4()}.mp3`;
+      // const file = new File([blob], fileName, { type: 'audio/mpeg' });
+
+      const fileName = `poetry-${uuidv4()}.mp3`; // Create a unique filename
+      const file = new File([inputFile], fileName, { type: inputFile.type }); // Create a new File object with the unique filename
+
+      const uploaded = await startUpload([file]);
+      const storageId = (uploaded[0].response as any).storageId;
+
+
+      setAudioStorageId(storageId);
+
+      const audioUrl = await getAudioUrl({ storageId });
+      setAudio(audioUrl!);
+      setIsGenerating(false);
+      toast({
+        title: "Poetry generated successfully",
+      })
+
+    } catch (error) {
+      console.log("Error generating Poetry", error);
+      toast({
+        title: "Error creating a poetry",
+        variant: 'destructive',
+      })
+      setIsGenerating(false);
+    }
+  }
+
+  return {
+    isGenerating,
+    generatePoetry
+  }
+}
+
+const GeneratePoetry = (props: GeneratePoetryProps) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { isGenerating, generatePoetry } = useGeneratePoetry(props);
+  const { toast } = useToast();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  }
+
+  const handleSubmit = () => {
+    if (selectedFile) {
+      generatePoetry(selectedFile);
+    } else {
+      toast({
+        title: "Please upload a file to generate poetry",
+      });
+    }
+  }
+
   return (
-    <div>GeneratePoetry</div>
+    <div>
+      <div className='flex flex-col gap-2.5'>
+        <Label className='text-16 font-bold text-white-1'>
+          AI Prompt to Generate Poetry
+        </Label>
+        <Textarea
+          className='input-class font-white focus-visible:ring-offset-orange-1'
+          placeholder='Provide text to generate Poetry'
+          rows={5}
+          value={props.voicePrompt}
+          onChange={(e) => props.setVoicePrompt(e.target.value)}
+        />
+        <input
+          type="file"
+          accept="audio/*"
+          onChange={handleFileChange}
+          className='input-class font-white focus-visible:ring-offset-orange-1'
+        />
+      </div>
+      <div className='mt-5 w-full max-w-[200px]'>
+        <Button className="text-16 bg-orange-1 py-4 font-bold 
+              text-white-1 transition-all" onClick={handleSubmit}>
+          {isGenerating ? (<>
+            Submitting...
+            <Loader size={20} className="animate-spin ml-2" />
+          </>) : (
+            'Generate'
+          )
+          }
+        </Button>
+        {props.audio && (
+          <audio src={props.audio}
+            autoPlay
+            className='mt-5'
+            onLoadedMetadata={(e) => props.setAudioDuration(e.currentTarget.duration)}
+          />
+        )}
+      </div>
+    </div>
   )
 }
 

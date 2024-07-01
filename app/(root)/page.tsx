@@ -8,6 +8,8 @@ import { api } from "@/convex/_generated/api";
 
 const Home = () => {
   // const tasks = useQuery(api.tasks.get);
+  const trendingPoetries = useQuery(api.poetries.getTrendingPoetries);
+
   return (
     <div className='mt-9 flex flex-col gap-9'>
       <section className='flex flex-col gap-9'>
@@ -16,13 +18,13 @@ const Home = () => {
           {tasks?.map(({ _id, text }) => <div key={_id}>{text}</div>)}
         </div> */}
         <div className='poetry_grid'>
-          {poetryData.map(({ id, title, description, imgURL }) => (
-            <PoetryCard
-              key={id}
-              imgURL={imgURL}
-              title={title}
-              description={description}
-              poetryId={id}
+        {trendingPoetries?.map(({ _id, poetryTitle, poetryDescription, imageUrl }) => (
+            <PoetryCard 
+              key={_id}
+              imgUrl={imageUrl as string}
+              title={poetryTitle}
+              description={poetryDescription}
+              poetryId={_id} 
             />
           ))}
         </div>
