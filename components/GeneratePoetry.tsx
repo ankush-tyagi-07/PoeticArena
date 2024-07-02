@@ -85,7 +85,7 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
       generatePoetry(selectedFile);
     } else {
       toast({
-        title: "Please upload a file to generate poetry",
+        title: "Please upload poetry",
       });
     }
   }
@@ -94,11 +94,11 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
     <div>
       <div className='flex flex-col gap-2.5'>
         <Label className='text-16 font-bold text-white-1'>
-          Write Poetry Here
+          Your Poetry
         </Label>
         <Textarea
           className='input-class font-white focus-visible:ring-offset-orange-1'
-          placeholder='Provide text to generate Poetry'
+          placeholder='Provide Poetry here'
           rows={5}
           value={props.voicePrompt}
           onChange={(e) => props.setVoicePrompt(e.target.value)}
