@@ -60,14 +60,21 @@ const CreatePoetry = () => {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
-      if(!audioUrl || !imageUrl) {
+      if(!audioUrl) {
         toast({
-          title: 'Please give audio and image',
+          title: 'Please give audio',
         })
         setIsSubmitting(false);
-        throw new Error('Please give audio and image')
+        throw new Error('Please give audio')
       }
 
+      if(!imageUrl) {
+        toast({
+          title: 'Please give Image',
+        })
+        setIsSubmitting(false);
+        throw new Error('Please give Image')
+      }
 
       const poetry = await createPoetry({
         poetryTitle: data.poetryTitle,
@@ -85,10 +92,6 @@ const CreatePoetry = () => {
       router.push('/')
     } catch (error) {
       console.log(error);
-      toast({
-        title: 'Error',
-        variant: 'destructive',
-      })
       setIsSubmitting(false);
     }
   }
