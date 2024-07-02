@@ -30,7 +30,14 @@ const useGeneratePoetry = ({
 
     if (!voicePrompt) {
       toast({
-        title: "Please provide a voiceType to generate a poetry",
+        title: "Please provide text for the poetry also",
+      })
+      return setIsGenerating(false);
+    }
+
+    if (!File) {
+      toast({
+        title: "Please provide audio file for poetry",
       })
       return setIsGenerating(false);
     }
@@ -85,7 +92,7 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
       generatePoetry(selectedFile);
     } else {
       toast({
-        title: "Please upload poetry",
+        title: "Please upload an audio file for poetry first",
       });
     }
   }
@@ -94,16 +101,19 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
     <div>
       <div className='flex flex-col gap-2.5'>
         <Label className='text-16 font-bold text-white-1'>
-          Your Poetry
+          Write Poetry Here
         </Label>
         <Textarea
           className='input-class font-white focus-visible:ring-offset-orange-1'
-          placeholder='Provide Poetry here'
+          placeholder='Provide text to generate Poetry'
           rows={5}
           value={props.voicePrompt}
           onChange={(e) => props.setVoicePrompt(e.target.value)}
         />
-        <div className='input-class my-6 py-6 px-5 focus-visible:ring-offset-orange-1'>
+        <Label className='mt-6 text-16 font-bold text-white-1'>
+          Give Audio for poetry and press Add Voice
+        </Label>
+        <div className='input-class mb-6 py-6 px-5 focus-visible:ring-offset-orange-1'>
           <input
             type="file"
             accept="audio/*"
@@ -113,7 +123,7 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
         </div>
       </div>
       <div className='mt-5 w-full max-w-[200px]'>
-        <Button className="text-16 bg-orange-1 py-4 font-bold 
+        <Button type='button' className="text-16 bg-orange-1 py-4 font-bold 
               text-white-1 transition-all" onClick={handleSubmit}>
           {isGenerating ? (<>
             Submitting...
