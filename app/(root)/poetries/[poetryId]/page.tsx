@@ -32,6 +32,16 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
     similarPoetries = similarPoetries.filter((poetry) => poetry._id !== poetryId);
   }
 
+  const formatVoicePrompt = (text:string) => {
+    if (!text) return '';
+
+    // Split the text by commas and periods
+    let formattedText = text.replace(/,/g, ',<br>');
+    formattedText = formattedText.replace(/\./g, '.<br><br>');
+
+    return formattedText;
+  };
+
   return (
     <section className='flex w-full flex-col'>
       <header className='mt-9 flex items-center justify-between'>
@@ -62,7 +72,7 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-4'>
           <h1 className='text-18 font-bold text-white-1'>Transcription</h1>
-          <p className='text-16 font-medium text-white-2'>{poetry?.voicePrompt}</p>
+          <p className='text-16 font-medium text-white-2' dangerouslySetInnerHTML={{ __html: formatVoicePrompt(poetry?.voicePrompt) }}></p>
         </div>
       </div>
 

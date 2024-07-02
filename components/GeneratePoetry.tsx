@@ -94,7 +94,7 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
     <div>
       <div className='flex flex-col gap-2.5'>
         <Label className='text-16 font-bold text-white-1'>
-          AI Prompt to Generate Poetry
+          Write Poetry Here
         </Label>
         <Textarea
           className='input-class font-white focus-visible:ring-offset-orange-1'
@@ -119,7 +119,7 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
             Submitting...
             <Loader size={20} className="animate-spin ml-2" />
           </>) : (
-            'Generate'
+            'Add Voice'
           )
           }
         </Button>
