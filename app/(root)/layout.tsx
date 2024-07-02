@@ -1,5 +1,6 @@
 import LeftSidebar from "@/components/LeftSidebar";
 import MobileNav from "@/components/MobileNav";
+import PoetryPlayer from "@/components/PoetryPlayer";
 import RightSidebar from "@/components/RightSidebar";
 import { Toaster } from "@/components/ui/toaster";
 import Image from "next/image";
@@ -31,6 +32,8 @@ export default function RootLayout({
 
             <RightSidebar/>
         </main>
+
+        <PoetryPlayer/>
     </div>
   );
 }

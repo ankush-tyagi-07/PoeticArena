@@ -16,7 +16,6 @@ const useGeneratePoetry = ({
   setAudio, voicePrompt, setAudioStorageId
 }: GeneratePoetryProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
-  // const getPoetryAudio = useAction(api.openai.generateAudioAction);
 
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const { startUpload } = useUploadFiles(generateUploadUrl)
@@ -37,14 +36,6 @@ const useGeneratePoetry = ({
     }
 
     try {
-      // const response = await getPoetryAudio({
-      //   voice: voiceType,
-      //   input: voicePrompt
-      // })
-
-      // const blob = new Blob([response], { type: 'audio/mpeg' });
-      // const fileName = `poetry-${uuidv4()}.mp3`;
-      // const file = new File([blob], fileName, { type: 'audio/mpeg' });
 
       const fileName = `poetry-${uuidv4()}.mp3`; // Create a unique filename
       const file = new File([inputFile], fileName, { type: inputFile.type }); // Create a new File object with the unique filename
@@ -112,12 +103,14 @@ const GeneratePoetry = (props: GeneratePoetryProps) => {
           value={props.voicePrompt}
           onChange={(e) => props.setVoicePrompt(e.target.value)}
         />
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-          className='input-class font-white focus-visible:ring-offset-orange-1'
-        />
+        <div className='input-class my-6 py-6 px-5 focus-visible:ring-offset-orange-1'>
+          <input
+            type="file"
+            accept="audio/*"
+            onChange={handleFileChange}
+            className=' font-white focus-visible:ring-offset-orange-1'
+          />
+        </div>
       </div>
       <div className='mt-5 w-full max-w-[200px]'>
         <Button className="text-16 bg-orange-1 py-4 font-bold 

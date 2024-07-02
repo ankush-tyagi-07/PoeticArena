@@ -45,9 +45,9 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
             width={24}
             height={24}
           />
-          <h2 className='text-16 font-bold text-white-1'>
+          {/* <h2 className='text-16 font-bold text-white-1'>
             {poetry?.views}
-          </h2>
+          </h2> */}
         </figure>
       </header>
 
@@ -71,7 +71,7 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
           Similar Poetries
         </h1>
         {similarPoetries && similarPoetries.length > 0 ? (
-          <div className="podcast_grid">
+          <div className="poetry_grid">
             {similarPoetries?.map(({ _id, poetryTitle, poetryDescription, imageUrl }) => (
               <PoetryCard 
                 key={_id}

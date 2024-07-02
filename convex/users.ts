@@ -93,7 +93,7 @@ export const updateUser = internalMutation({
     await Promise.all(
       poetry.map(async (p) => {
         await ctx.db.patch(p._id, {
-          authorImageURL: args.imageUrl,
+          authorImageUrl: args.imageUrl,
         });
       })
     );

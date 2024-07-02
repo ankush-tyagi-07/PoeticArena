@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { api } from "@/convex/_generated/api";
-// import { useAudio } from '@/providers/AudioProvider';
+import { useAudio } from '@/providers/AudioProvider';
 import { PoetryDetailPlayerProps } from "@/types";
 
 import LoaderSpinner from "./LoaderSpinner";
@@ -25,7 +25,7 @@ const PoetryDetailPlayer = ({
   authorId,
 }: PoetryDetailPlayerProps) => {
   const router = useRouter();
-  // const { setAudio } = useAudio();
+  const { setAudio } = useAudio();
   const { toast } = useToast();
   const [isDeleting, setIsDeleting] = useState(false);
   const deletePoetry = useMutation(api.poetries.deletePoetry);
@@ -47,13 +47,13 @@ const PoetryDetailPlayer = ({
   };
 
   const handlePlay = () => {
-    // setAudio({
-    //   title: poetryTitle,
-    //   audioUrl,
-    //   imageUrl,
-    //   author,
-    //   poetryId,
-    // });
+    setAudio({
+      title: poetryTitle,
+      audioUrl,
+      imageUrl,
+      author,
+      poetryId,
+    });
   };
 
   if (!imageUrl || !authorImageUrl) return <LoaderSpinner />;
