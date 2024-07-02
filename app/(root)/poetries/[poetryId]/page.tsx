@@ -8,7 +8,6 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUser } from '@clerk/nextjs'
 import { useQuery } from 'convex/react'
-import { SectionIcon } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
@@ -35,8 +34,15 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
   const formatVoicePrompt = (text:string) => {
     if (!text) return '';
 
+    // Escape HTML entities
+    let formattedText = text.replace(/&/g, '&amp;');
+    formattedText = formattedText.replace(/</g, '&lt;');
+    formattedText = formattedText.replace(/>/g, '&gt;');
+    formattedText = formattedText.replace(/'/g, '&apos;');
+    formattedText = formattedText.replace(/"/g, '&quot;');
+
     // Split the text by commas and periods
-    let formattedText = text.replace(/,/g, ',<br>');
+    formattedText = formattedText.replace(/,/g, ',<br>');
     formattedText = formattedText.replace(/\./g, '.<br><br>');
 
     return formattedText;
@@ -72,7 +78,7 @@ const PoetryDetails = ({ params: { poetryId } }: { params: { poetryId: Id<'poetr
       <div className='flex flex-col gap-8'>
         <div className='flex flex-col gap-4'>
           <h1 className='text-18 font-bold text-white-1'>Transcription</h1>
-          <p className='text-16 font-medium text-white-2' dangerouslySetInnerHTML={{ __html: formatVoicePrompt(poetry?.voicePrompt) }}></p>
+          <p className='text-16 font-medium text-white-2' dangerouslySetInnerHTML={{ __html: formatVoicePrompt(poetry?.voicePrompt ?? '') }}></p>
         </div>
       </div>
 
